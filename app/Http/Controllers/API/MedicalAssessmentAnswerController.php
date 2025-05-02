@@ -32,7 +32,7 @@ class MedicalAssessmentAnswerController extends Controller
 
             $userId = $user->id;
             $storedAnswers = [];
-            Log::info('Available question IDs:', MedicalAssessmentQuestion::pluck('id')->toArray());
+            //Log::info('Available question IDs:', MedicalAssessmentQuestion::pluck('id')->toArray());
             // return;
             foreach ($validated['answers'] as $answer) {
                 $storedAnswers =    $this->answer->store_medical_assessment_answers([

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\PersonalInfoController;
 use App\Http\Controllers\API\MedicalAssessmentAnswerController;
-
+use App\Http\Controllers\API\MedicalAssessmentQuestionController;
 
 // ==========================================================================public routes=================================================================
 Route::prefix('v1')->group(function () {
@@ -31,4 +31,5 @@ Route::prefix('v1')->group(function () {
     Route::post('/profile', [PersonalInfoController::class, 'profile']);
     Route::post('/physical-assessment', [PersonalInfoController::class, 'physical_assessment']);
     Route::post('/medical-assessment-answers', MedicalAssessmentAnswerController::class);
+    Route::get('/medical-assessment-questions', MedicalAssessmentQuestionController::class);
 })->middleware('auth:sanctum');
