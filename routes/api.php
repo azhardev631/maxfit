@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\PersonalInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\PersonalInfoController;
+use App\Http\Controllers\API\MedicalAssessmentAnswerController;
 
 
 // ==========================================================================public routes=================================================================
@@ -29,4 +30,5 @@ Route::prefix('v1')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/profile', [PersonalInfoController::class, 'profile']);
     Route::post('/physical-assessment', [PersonalInfoController::class, 'physical_assessment']);
+    Route::post('/medical-assessment-answers', MedicalAssessmentAnswerController::class);
 })->middleware('auth:sanctum');

@@ -2,12 +2,9 @@
 namespace App\Repositories\Contracts;
 interface MedicalAssessmentQuestionRepositoryInterface {
     public function get_medical_assessment_questions();
-    // public function get_organisation_types();
-    // public function create_organisation(array $data);
-    // public function get_organisation($id);
-    // public function update_organisation($id, array $data);
-    // public function delete_organisation($id);
-
+    public function store_medical_assessment_question(array $data);
+    public function get_medical_assessment_question($id);
+    public function update_medical_assessment_question($id, array $data);
+    public function delete_medical_assessment_question($id);
 }
-
 ?>

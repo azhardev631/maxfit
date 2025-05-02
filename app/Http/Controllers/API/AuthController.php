@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         $user = $this->authRepo->register($data);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('sanctum')->plainTextToken;
 
         return $this->success(
             [

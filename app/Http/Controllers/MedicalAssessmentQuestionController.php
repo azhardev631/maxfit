@@ -12,7 +12,8 @@ class MedicalAssessmentQuestionController extends Controller
      * Display a listing of the resource.
      */
     protected $medical_asses;
-    public function __construct(MedicalAssessmentQuestionRepositoryInterface $medical_asses){
+    public function __construct(MedicalAssessmentQuestionRepositoryInterface $medical_asses)
+    {
         $this->medical_asses = $medical_asses;
     }
 
@@ -27,7 +28,7 @@ class MedicalAssessmentQuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('medical_assessment_questions.create');
     }
 
     /**
@@ -35,7 +36,17 @@ class MedicalAssessmentQuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'assessment_type' => 'required|in:Assessment,Medical',
+            'question' => 'required|string|max:255',
+            'type' => 'required|in:input,textarea,selection',
+            'answer_options' => 'nullable|string',
+        ]);
+        $validated['is_required'] = $request->has('is_required');
+
+        $this->medical_asses->store_medical_assessment_question($validated);
+        Toastr::success('Medical Assessment Question created successfully', 'Success');
+        return redirect()->route('medical-assessment-questions.index');
     }
 
     /**
@@ -51,7 +62,8 @@ class MedicalAssessmentQuestionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $medical_assessment_question = $this->medical_asses->get_medical_assessment_question($id);
+        return view('medical_assessment_questions.edit', compact('medical_assessment_question'));
     }
 
     /**
@@ -59,7 +71,23 @@ class MedicalAssessmentQuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'assessment_type' => 'required|in:Assessment,Medical',
+            'question' => 'required|string|max:255',
+            'type' => 'required|in:input,textarea,selection',
+            'is_required' => 'nullable|boolean',
+            'answer_options' => 'nullable|string',
+        ]);
+
+        if ($validated['type'] !== 'selection') {
+            $validated['answer_options'] = null;
+        }
+
+        $validated['is_required'] = $request->has('is_required') ? 1 : 0;
+
+        $this->medical_asses->update_medical_assessment_question($id, $validated);
+        Toastr::success('Medical Assessment Question updated successfully', 'Success');
+        return redirect()->route('medical-assessment-questions.index');
     }
 
     /**
@@ -67,6 +95,8 @@ class MedicalAssessmentQuestionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->medical_asses->delete_medical_assessment_question($id);
+        Toastr::success('Medical Assessment Question deleted successfully', 'Success');
+        return redirect()->route('medical-assessment-questions.index');
     }
 }
