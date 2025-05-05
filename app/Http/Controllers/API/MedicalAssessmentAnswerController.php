@@ -23,13 +23,25 @@ class MedicalAssessmentAnswerController extends Controller
     {
         $user = auth('sanctum')->user();
         // dd($user->id);
+        Log::info($request->all());
         try {
+            // Validate that answers is a required string (JSON string)
             $validated = $request->validate([
-                'answers' => 'required|array'
+                'answers' => 'required|string', // Change to 'string' since it's a JSON string in the request
             ]);
 
-            $questionIds = array_keys($validated['answers']);
+            // Decode the JSON string into an array
+            $answers = json_decode($validated['answers'], true);
 
+            // Check if JSON decoding was successful
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return $this->error('Invalid JSON format for answers.', [], 422);
+            }
+
+            // Validate the decoded array
+            $questionIds = array_keys($answers);
+
+            // Check if all question IDs are valid
             $validQuestionIds = MedicalAssessmentQuestion::whereIn('id', $questionIds)->pluck('id')->toArray();
             $invalidIds = array_diff($questionIds, $validQuestionIds);
 
@@ -37,12 +49,12 @@ class MedicalAssessmentAnswerController extends Controller
                 return $this->error("Invalid question IDs: " . implode(', ', $invalidIds), [], 422);
             }
 
+            // Process the valid answers and store them
             $userId = $user->id;
             $storedAnswers = [];
-            //Log::info('Available question IDs:', MedicalAssessmentQuestion::pluck('id')->toArray());
-            // return;
-            foreach ($validated['answers'] as $questionId => $answer) {
-                $storedAnswers =    $this->answer->store_medical_assessment_answers([
+            foreach ($answers as $questionId => $answer) {
+                // Store each answer (assuming store_medical_assessment_answers method exists)
+                $storedAnswers[] = $this->answer->store_medical_assessment_answers([
                     'question_id' => $questionId,
                     'answer' => $answer,
                     'user_id' => $userId,
