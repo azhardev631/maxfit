@@ -3,13 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\MedicalAssessmentQuestionController;
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\ExerciseCategoryController;
 use App\Http\Controllers\OrganisationTypesController;
-
-
-
+use App\Http\Controllers\MedicalAssessmentQuestionController;
 
 
 Route::get('/dashboard', function () {
@@ -23,23 +22,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-
-
-
     Route::resource('users', UsersController::class);
     Route::resource('organisation-types', OrganisationTypesController::class);
     Route::resource('organisations', OrganisationController::class);
     Route::resource('medical-assessment-questions', MedicalAssessmentQuestionController::class);
+    Route::resource('exercise-categories', ExerciseCategoryController::class);
+    Route::resource('exercises', ExerciseController::class);
 
 });
-
-
 
 Route::get('clear-cache', function() {
     Artisan::call('optimize:clear');
     return "Cache is cleared";
 });
-
 
 Route::get('/force-fix-link', function () {
     $publicStorage = public_path('storage');

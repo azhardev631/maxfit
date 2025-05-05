@@ -3,9 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ExercisesController;
 use App\Http\Controllers\API\PersonalInfoController;
 use App\Http\Controllers\API\MedicalAssessmentAnswerController;
 use App\Http\Controllers\API\MedicalAssessmentQuestionController;
+use App\Http\Controllers\API\UserAssessmentExerciseController;
 
 // ==========================================================================public routes=================================================================
 Route::prefix('v1')->group(function () {
@@ -32,4 +34,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/physical-assessment', [PersonalInfoController::class, 'physical_assessment']);
     Route::post('/medical-assessment-answers', MedicalAssessmentAnswerController::class);
     Route::get('/medical-assessment-questions', MedicalAssessmentQuestionController::class);
+    Route::get('/exercises', ExercisesController::class);
+    Route::post('/user-assessment-exercises', UserAssessmentExerciseController::class);
 })->middleware('auth:sanctum');

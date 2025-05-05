@@ -13,7 +13,7 @@ class MedicalAssessmentQuestionController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $questions = MedicalAssessmentQuestion::all();
+        $questions = MedicalAssessmentQuestion::all()->groupBy('assessment_type');
         return $this->success($questions, 'Questions fetched successfully', 200);
     }
 }

@@ -25,19 +25,26 @@ class MedicalAssessmentAnswerController extends Controller
         // dd($user->id);
         try {
             $validated = $request->validate([
-                'answers' => 'required|array',
-                'answers.*.question_id' => 'required|exists:medical_assessment_questions,id',
-                'answers.*.answer' => 'nullable|string',
+                'answers' => 'required|array'
             ]);
+
+            $questionIds = array_keys($validated['answers']);
+
+            $validQuestionIds = MedicalAssessmentQuestion::whereIn('id', $questionIds)->pluck('id')->toArray();
+            $invalidIds = array_diff($questionIds, $validQuestionIds);
+
+            if (!empty($invalidIds)) {
+                return $this->error("Invalid question IDs: " . implode(', ', $invalidIds), [], 422);
+            }
 
             $userId = $user->id;
             $storedAnswers = [];
             //Log::info('Available question IDs:', MedicalAssessmentQuestion::pluck('id')->toArray());
             // return;
-            foreach ($validated['answers'] as $answer) {
+            foreach ($validated['answers'] as $questionId => $answer) {
                 $storedAnswers =    $this->answer->store_medical_assessment_answers([
-                    'question_id' => $answer['question_id'],
-                    'answer' => $answer['answer'] ?? null,
+                    'question_id' => $questionId,
+                    'answer' => $answer,
                     'user_id' => $userId,
                 ]);
             }

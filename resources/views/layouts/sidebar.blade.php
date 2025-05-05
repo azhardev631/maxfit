@@ -28,6 +28,8 @@
             <a href="{{route('organisation-types.index')}}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Org. Types</a>
             <a href="{{route('organisations.index')}}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Organisations</a>
             <a href="{{route('medical-assessment-questions.index')}}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Medical Assessment Ques.</a>
+            <a href="{{route('exercise-categories.index')}}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Exercise Categories</a>
+            <a href="{{route('exercises.index')}}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Exercises</a>
             <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
             <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
             <div class="nav-item dropdown">

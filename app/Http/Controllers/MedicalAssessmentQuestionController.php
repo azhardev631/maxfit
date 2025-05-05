@@ -42,7 +42,7 @@ class MedicalAssessmentQuestionController extends Controller
             'type' => 'required|in:input,textarea,selection',
             'answer_options' => 'nullable|string',
         ]);
-        $validated['is_required'] = $request->has('is_required');
+        $validated['is_required'] = $request->input('assessment_type') === 'Medical' ? 0 : $request->has('is_required');
 
         $this->medical_asses->store_medical_assessment_question($validated);
         Toastr::success('Medical Assessment Question created successfully', 'Success');
