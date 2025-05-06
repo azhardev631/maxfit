@@ -12,28 +12,37 @@ class UserAssessmentExerciseController extends Controller
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'exercise_id' => 'required|exists:exercises,id',
-            'value' => 'nullable|numeric',
+            'userId' => 'required|exists:users,id',
+            'exerice' => 'required|array',
+            'exerice.*' => 'nullable|numeric'
         ]);
 
         if ($validator->fails()) {
             return $this->unprocessable($validator->errors()->toArray(), 'Validation Error');
         }
 
-        //dd('zaid');
         try {
-            $assessment = DB::table('user_exercise_assessment')->insert([
-                'user_id' => $request->user_id,
-                'exercise_id' => $request->exercise_id,
-                'value' => $request->value,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $userId = $request->userId;
+            $exerciseData = $request->input('exerice');
+
+            $insertData = [];
+
+            foreach ($exerciseData as $exerciseId => $value) {
+                // Optionally validate existence of exercise_id here again if needed
+                $insertData[] = [
+                    'user_id' => $userId,
+                    'exercise_id' => $exerciseId,
+                    'value' => $value,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            DB::table('user_exercise_assessment')->insert($insertData);
+
+            return $this->success(null, 'User Exercise Assessments added successfully', 200);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), [], 500);
         }
-
-        return $this->success($assessment, 'User Assessment added successfully', 200);
     }
 }
